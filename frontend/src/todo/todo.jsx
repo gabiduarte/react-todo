@@ -11,7 +11,6 @@ export default class Todo extends Component {
                 <TodoForm/>
                 <TodoList/>
             </div>
-            
         )
     }
 }
