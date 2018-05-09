@@ -14,8 +14,13 @@ export default class Todo extends Component {
         this.handleAdd = this.handleAdd.bind(this) //make sure that this references the Todo class, not the scope of the handleAdd onClick call (which is null)
         this.handleChange = this.handleChange.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
+        this.toggleTodoState = this.toggleTodoState.bind(this)
 
         this.refresh();
+    }
+
+    toggleTodoState(todo, isDone) {
+        axios.put(`${URL}/${todo._id}`, {...todo, done: isDone}).then( res => this.refresh());
     }
 
     refresh() {
@@ -41,7 +46,7 @@ export default class Todo extends Component {
             <div>
                 <PageHeader name="Add a todo" small="or not"/>
                 <TodoForm description={this.state.description} handleAdd={this.handleAdd} handleChange={this.handleChange}/>
-                <TodoList list={this.state.list} handleDelete={this.handleDelete}/>
+                <TodoList list={this.state.list} handleDelete={this.handleDelete} toggleTodoState={this.toggleTodoState}/>
             </div>
         )
     }
