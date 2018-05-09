@@ -14,21 +14,27 @@ export default class Todo extends Component {
         this.handleAdd = this.handleAdd.bind(this) //make sure that this references the Todo class, not the scope of the handleAdd onClick call (which is null)
         this.handleChange = this.handleChange.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
+        this.handleSearch = this.handleSearch.bind(this)
         this.toggleTodoState = this.toggleTodoState.bind(this)
 
-        this.refresh();
+        this.refresh(this.state.description);
     }
 
     toggleTodoState(todo, isDone) {
-        axios.put(`${URL}/${todo._id}`, {...todo, done: isDone}).then( res => this.refresh());
+        axios.put(`${URL}/${todo._id}`, {...todo, done: isDone}).then( res => this.refresh(this.state.description));
     }
 
-    refresh() {
-        axios.get(`${URL}?sort=-createdAt`).then( res => this.setState({...this.state, description: '', list: res.data}));
+    refresh(description = '') {
+        const search = description ? `&description__regex=/${description}/` : ''
+        axios.get(`${URL}?sort=-createdAt${search}`).then( res => this.setState({...this.state, description, list: res.data}));
+    }
+
+    handleSearch() {
+        this.refresh(this.state.description)
     }
 
     handleDelete(todo) {
-        axios.delete(`${URL}/${todo._id}`).then(res => this.refresh());
+        axios.delete(`${URL}/${todo._id}`).then(res => this.refresh(this.state.description));
     }
 
     handleChange(event) {
@@ -38,14 +44,14 @@ export default class Todo extends Component {
     handleAdd() {
         const description = this.state.description;
 
-        axios.post(URL, { description: description}).then((res) => this.refresh());
+        axios.post(URL, { description: description}).then((res) => this.refresh(this.state.description));
     }
 
     render() {
         return (
             <div>
                 <PageHeader name="Add a todo" small="or not"/>
-                <TodoForm description={this.state.description} handleAdd={this.handleAdd} handleChange={this.handleChange}/>
+                <TodoForm description={this.state.description} handleAdd={this.handleAdd} handleChange={this.handleChange} handleSearch={this.handleSearch}/>
                 <TodoList list={this.state.list} handleDelete={this.handleDelete} toggleTodoState={this.toggleTodoState}/>
             </div>
         )
