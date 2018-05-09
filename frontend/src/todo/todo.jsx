@@ -13,6 +13,7 @@ export default class Todo extends Component {
         this.state = { description: '', list: []} //initial state of todos.
         this.handleAdd = this.handleAdd.bind(this) //make sure that this references the Todo class, not the scope of the handleAdd onClick call (which is null)
         this.handleChange = this.handleChange.bind(this)
+        this.handleClear = this.handleClear.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
         this.handleSearch = this.handleSearch.bind(this)
         this.toggleTodoState = this.toggleTodoState.bind(this)
@@ -41,6 +42,10 @@ export default class Todo extends Component {
         this.setState({...this.state, description: event.target.value});
     }
 
+    handleClear() {
+        this.refresh();
+    }
+
     handleAdd() {
         const description = this.state.description;
 
@@ -51,8 +56,16 @@ export default class Todo extends Component {
         return (
             <div>
                 <PageHeader name="Add a todo" small="or not"/>
-                <TodoForm description={this.state.description} handleAdd={this.handleAdd} handleChange={this.handleChange} handleSearch={this.handleSearch}/>
-                <TodoList list={this.state.list} handleDelete={this.handleDelete} toggleTodoState={this.toggleTodoState}/>
+                <TodoForm
+                    description={this.state.description}
+                    handleAdd={this.handleAdd} 
+                    handleChange={this.handleChange} 
+                    handleSearch={this.handleSearch}
+                    handleClear={this.handleClear}/>
+                <TodoList 
+                    list={this.state.list} 
+                    handleDelete={this.handleDelete} 
+                    toggleTodoState={this.toggleTodoState}/>
             </div>
         )
     }
