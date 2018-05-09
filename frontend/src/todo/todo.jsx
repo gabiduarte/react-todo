@@ -13,6 +13,17 @@ export default class Todo extends Component {
         this.state = { description: '', list: []} //initial state of todos.
         this.handleAdd = this.handleAdd.bind(this) //make sure that this references the Todo class, not the scope of the handleAdd onClick call (which is null)
         this.handleChange = this.handleChange.bind(this)
+        this.handleDelete = this.handleDelete.bind(this)
+
+        this.refresh();
+    }
+
+    refresh() {
+        axios.get(`${URL}?sort=-createdAt`).then( res => this.setState({...this.state, description: '', list: res.data}));
+    }
+
+    handleDelete(todo) {
+        axios.delete(`${URL}/${todo._id}`).then(res => this.refresh());
     }
 
     handleChange(event) {
@@ -22,7 +33,7 @@ export default class Todo extends Component {
     handleAdd() {
         const description = this.state.description;
 
-        axios.post(URL, { description: description}).then((res) => console.log('yay'));
+        axios.post(URL, { description: description}).then((res) => this.refresh());
     }
 
     render() {
@@ -30,7 +41,7 @@ export default class Todo extends Component {
             <div>
                 <PageHeader name="Add a todo" small="or not"/>
                 <TodoForm description={this.state.description} handleAdd={this.handleAdd} handleChange={this.handleChange}/>
-                <TodoList/>
+                <TodoList list={this.state.list} handleDelete={this.handleDelete}/>
             </div>
         )
     }
