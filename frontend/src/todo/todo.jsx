@@ -63,7 +63,6 @@ export default class Todo extends Component {
                     handleSearch={this.handleSearch}
                     handleClear={this.handleClear}/>
                 <TodoList 
-                    list={this.state.list} 
                     handleDelete={this.handleDelete} 
                     toggleTodoState={this.toggleTodoState}/>
             </div>
