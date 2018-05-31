@@ -29,7 +29,15 @@ export const toggleTodoState = (todo, isDone) => {
 
     return dispatch => {
         axios.put(`${URL}/${todo._id}`, {...todo, done: isDone})
-            .then(res => dispatch({ type: actionName}))
+            .then(res => dispatch({type: actionName}))
+            .then(res => dispatch(search()));
+    }
+}
+
+export const remove = (todo) => {
+    return dispatch =>  {
+        axios.delete(`${URL}/${todo._id}`)
+            .then(res => dispatch({type: 'TODO_DELETED'}))
             .then(res => dispatch(search()));
     }
 }

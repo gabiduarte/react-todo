@@ -2,7 +2,7 @@ import React from 'react'
 import IconButton from '../template/iconButton'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { toggleTodoState } from './todoActions'
+import { toggleTodoState, remove } from './todoActions'
 
 const TodoList = props => {
 
@@ -15,7 +15,7 @@ const TodoList = props => {
                     <td>
                         <IconButton show={!todo.done} style="success" icon="check" onClick={() => props.toggleTodoState(todo, true)}/>
                         <IconButton show={todo.done} style="warning" icon="undo" onClick={() => props.toggleTodoState(todo, false)}/>
-                        <IconButton show={todo.done} style="danger" icon="trash-o" onClick={() => props.handleDelete()}/>
+                        <IconButton show={todo.done} style="danger" icon="trash-o" onClick={() => props.remove(todo)}/>
                     </td>
                 </tr>
             ))
@@ -39,6 +39,6 @@ const TodoList = props => {
 }
 
 const mapStateToProps = state => ({ list: state.todo.list }) // passa a pegar do reducer, ao invés do props list.
-const mapDispatchToProps = dispatch => bindActionCreators({toggleTodoState}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({toggleTodoState, remove}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
