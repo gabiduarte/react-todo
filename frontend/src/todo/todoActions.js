@@ -15,3 +15,11 @@ export const search = () => {
         payload: request
     }
 }
+
+export const add = (description) => {
+    return dispatch => { //possivel por causa do thunk - nao vai devolver uma ação de cara e sim fazer novos dispatches que vao trabalhar de forma assincrona
+        axios.post(URL, {description})
+            .then( res => dispatch({ type: 'TODO_ADDED', payload: res.data}))
+            .then( res => dispatch(search()));
+    }
+}

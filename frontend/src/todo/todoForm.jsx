@@ -5,7 +5,7 @@ import IconButton from '../template/iconButton'
 import { connect } from 'react-redux'
 
 import { bindActionCreators } from 'redux'
-import { changeDescription, search } from './todoActions'
+import { changeDescription, search, add } from './todoActions'
 
 class TodoForm extends Component {
     constructor(props) {
@@ -19,10 +19,13 @@ class TodoForm extends Component {
     }
 
     keyHandler(e) {
-        if (e.key == 'Enter') this.props.handleAdd();
+        const {add, description} = this.props;
+        if (e.key == 'Enter') add(description);
     }
 
     render() {
+        const {add, description, search} = this.props;
+
         return (
             <div role='form' className='todoForm'>
     
@@ -30,15 +33,15 @@ class TodoForm extends Component {
                     <input id='description'
                         className='form-control'
                         placeholder='Add a task'
-                        value={this.props.description}
+                        value={description}
                         onChange={this.props.changeDescription}
                         onKeyUp={this.keyHandler}>
                     </input>
                 </Grid>
     
                 <Grid cols="12 3 2 2">
-                    <IconButton show={true} style='primary' icon='plus' onClick={this.props.handleAdd}></IconButton>
-                    <IconButton show={true} style='info' icon='search' onClick={this.props.handleSearch}></IconButton>
+                    <IconButton show={true} style='primary' icon='plus' onClick={() => add(description)}></IconButton>
+                    <IconButton show={true} style='info' icon='search' onClick={() => search()}></IconButton>
                     <IconButton show={true} style='default' icon='close' onClick={this.props.handleClear}></IconButton>
                 </Grid>
             </div>
@@ -47,6 +50,6 @@ class TodoForm extends Component {
 }
 
 const mapStateToProps = state => ({description: state.todo.description}); // description passa a vir do estado do reducer
-const mapDispatchToProps = dispatch => bindActionCreators({changeDescription, search}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({changeDescription, search, add}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoForm);
