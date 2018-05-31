@@ -19,7 +19,8 @@ export const search = () => {
 export const add = (description) => {
     return dispatch => { //possivel por causa do thunk - nao vai devolver uma ação de cara e sim fazer novos dispatches que vao trabalhar de forma assincrona
         axios.post(URL, {description})
-            .then( res => dispatch({ type: 'TODO_ADDED', payload: res.data}))
+            .then( res => dispatch({ type: 'TODO_ADDED'}))
+            .then( res => dispatch(clear()))
             .then( res => dispatch(search()));
     }
 }
@@ -39,5 +40,11 @@ export const remove = (todo) => {
         axios.delete(`${URL}/${todo._id}`)
             .then(res => dispatch({type: 'TODO_DELETED'}))
             .then(res => dispatch(search()));
+    }
+}
+
+export const clear = () => {
+    return {
+        type: 'SEARCH_CLEARED'
     }
 }

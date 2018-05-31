@@ -5,7 +5,7 @@ import IconButton from '../template/iconButton'
 import { connect } from 'react-redux'
 
 import { bindActionCreators } from 'redux'
-import { changeDescription, search, add } from './todoActions'
+import { changeDescription, search, add, clear } from './todoActions'
 
 class TodoForm extends Component {
     constructor(props) {
@@ -24,7 +24,7 @@ class TodoForm extends Component {
     }
 
     render() {
-        const {add, description, search} = this.props;
+        const {add, description, search, clear} = this.props;
 
         return (
             <div role='form' className='todoForm'>
@@ -42,7 +42,7 @@ class TodoForm extends Component {
                 <Grid cols="12 3 2 2">
                     <IconButton show={true} style='primary' icon='plus' onClick={() => add(description)}></IconButton>
                     <IconButton show={true} style='info' icon='search' onClick={() => search()}></IconButton>
-                    <IconButton show={true} style='default' icon='close' onClick={this.props.handleClear}></IconButton>
+                    <IconButton show={true} style='default' icon='close' onClick={() => clear()}></IconButton>
                 </Grid>
             </div>
         )
@@ -50,6 +50,6 @@ class TodoForm extends Component {
 }
 
 const mapStateToProps = state => ({description: state.todo.description}); // description passa a vir do estado do reducer
-const mapDispatchToProps = dispatch => bindActionCreators({changeDescription, search, add}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({changeDescription, search, add, clear}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoForm);
