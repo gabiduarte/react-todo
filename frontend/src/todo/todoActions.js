@@ -23,3 +23,13 @@ export const add = (description) => {
             .then( res => dispatch(search()));
     }
 }
+
+export const toggleTodoState = (todo, isDone) => {
+    const actionName = isDone ? 'TODO_MARKED_AS_DONE' : 'TODO_MARKED_AS_PENDING';
+
+    return dispatch => {
+        axios.put(`${URL}/${todo._id}`, {...todo, done: isDone})
+            .then(res => dispatch({ type: actionName}))
+            .then(res => dispatch(search()));
+    }
+}
